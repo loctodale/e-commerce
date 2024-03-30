@@ -1,0 +1,11 @@
+const express = require("express");
+const { asyncHandler } = require("../../helper/asyncHandler");
+const { authentication } = require("../../auth/authUtils");
+const CartController = require("../../controllers/cart.controller");
+const router = express.Router();
+router.get("", asyncHandler(CartController.listTocart));
+router.post("/addToCart", asyncHandler(CartController.addTocart));
+router.post("/updateCart", asyncHandler(CartController.updateCart));
+router.delete("/deleteCart", asyncHandler(CartController.deleteCart));
+router.use(authentication);
+module.exports = router;
