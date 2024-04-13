@@ -16,10 +16,12 @@ class LoggerService {
     this.client.on("ready", () => {
       console.log(`Logged in as ${this.client.user.tag}!`);
     });
+    const key =
+      "MTIyMzE4MjM2OTU4NzA3MzA0NA.GyCFnp.wpDlnMnb6OoIY2PaGCUDWQTaHXVTKQaOS-yBAM";
 
     this.client.login(
       // TOKEN_DISCORD
-      "MTIyMzE4MjM2OTU4NzA3MzA0NA.GyCFnp.wpDlnMnb6OoIY2PaGCUDWQTaHXVTKQaOS-yBAM"
+      key
     );
   }
 
