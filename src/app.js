@@ -2,6 +2,8 @@ const morgan = require("morgan");
 const compression = require("compression");
 const { default: helmet } = require("helmet");
 const express = require("express");
+require("dotenv").config();
+
 const app = express();
 
 app.use(express.json());
@@ -40,4 +42,8 @@ app.use((err, req, res, next) => {
   });
 });
 
+//test pub sub
+// require("./tests/inventory.test");
+// const productTest = require("./tests/product.test");
+// productTest.purchaseProduct({ productId: "P001", quantity: 10 });
 module.exports = app;

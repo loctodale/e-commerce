@@ -8,6 +8,7 @@ const { BadRequestError } = require("../core/error.response");
 const ProductRepository = require("../models/repositories/product.repo");
 const InventoryRepository = require("../models/repositories/inventory.repo");
 const { removeUndefinedObject, updateNestedObject } = require("../utils");
+const NotificationService = require("./notification.service");
 
 class ProductFactory {
   static productRegistry = {};
@@ -127,6 +128,17 @@ class Product {
         shop_id: this.product_shop,
         stock: this.product_quantity,
       });
+      NotificationService.pushNotificationToSystem({
+        type: "SHOP-001",
+        receivedId: 1,
+        senderId: this.product_shop,
+        options: {
+          product_name: this.product_name,
+          shop_name: this.product_shop,
+        },
+      })
+        .then((rs) => console.log(rs))
+        .catch((err) => console.error(err));
     }
     return newProduct;
   }
