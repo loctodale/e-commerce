@@ -1,5 +1,5 @@
 const { Client, GatewayIntentBits } = require("discord.js");
-// const { CHANNELID_DISCORD, TOKEN_DISCORD } = process.env;
+const { CHANNELID_DISCORD, TOKEN_DISCORD } = process.env;
 class LoggerService {
   constructor() {
     this.client = new Client({
@@ -11,18 +11,13 @@ class LoggerService {
       ],
     });
 
-    this.channelId = "1223183783692472334"; //CHANNELID_DISCORD;
+    this.channelId = CHANNELID_DISCORD;
 
     this.client.on("ready", () => {
       console.log(`Logged in as ${this.client.user.tag}!`);
     });
-    const key =
-      "MTIyMzE4MjM2OTU4NzA3MzA0NA.GyCFnp.wpDlnMnb6OoIY2PaGCUDWQTaHXVTKQaOS-yBAM";
 
-    this.client.login(
-      // TOKEN_DISCORD
-      key
-    );
+    this.client.login(TOKEN_DISCORD);
   }
 
   sendToMessage(message = "message") {
