@@ -1,8 +1,10 @@
-const redis = require("redis");
 const { promisify } = require("util");
 const inventoryRepo = require("../models/repositories/inventory.repo");
-const redisClient = redis.createClient();
+// const redis = require("redis");
+// const redisClient = redis.createClient();
+const { getRedis } = require("../dbs/init.redis");
 
+const { instanceConnect: redisClient } = getRedis();
 const pexpire = promisify(redisClient.pexpire).bind(redisClient);
 const setnxAsync = promisify(redisClient.setnx).bind(redisClient);
 

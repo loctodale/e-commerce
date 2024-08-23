@@ -1,26 +1,25 @@
+// const logger = require("../loggers/winston.log");
+const myLogger = require("../loggers/mylogger.log");
 const { ReasonPhrases, StatusCodes } = require("../utils/httpStatusCode");
-
-const StatusCode = {
-  FORBIRDEN: 403,
-  CONFLICT: 409,
-};
-
-const ReasonStatusCode = {
-  FORBIDDEN: "bad request",
-  CONFLICT: "conflict error",
-};
 
 class ErrorResponse extends Error {
   constructor(message, status) {
     super(message);
     this.status = status;
+    this.now = Date.now();
+    // logger.error(`${this.status} - ${this.message}`);
+    // myLogger.error(this.message, [
+    //   "/api/v1/login",
+    //   "vv3344",
+    //   { error: "Bad Request" },
+    // ]);
   }
 }
 
 class ConflictRequestError extends ErrorResponse {
   constructor(
-    message = ReasonStatusCode.CONFLICT,
-    statusCode = StatusCode.CONFLICT
+    message = ReasonPhrases.CONFLICT,
+    statusCode = StatusCodes.CONFLICT
   ) {
     super(message, statusCode);
   }
@@ -28,8 +27,8 @@ class ConflictRequestError extends ErrorResponse {
 
 class BadRequestError extends ErrorResponse {
   constructor(
-    message = ReasonStatusCode.FORBIDDEN,
-    statusCode = StatusCode.FORBIDDEN
+    message = ReasonPhrases.BAD_REQUEST,
+    statusCode = StatusCodes.BAD_REQUEST
   ) {
     super(message, statusCode);
   }
@@ -62,7 +61,18 @@ class ForbiddenError extends ErrorResponse {
   }
 }
 
+class RedisErrorResponse extends ErrorResponse {
+  constructor(
+    message = ReasonPhrases.INTERNAL_SERVER_ERROR,
+    statusCode = StatusCodes.INTERNAL_SERVER_ERROR
+  ) {
+    super(message, statusCode);
+  }
+}
+
 module.exports = {
+  ErrorResponse,
+  RedisErrorResponse,
   ForbiddenError,
   ConflictRequestError,
   BadRequestError,

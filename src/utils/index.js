@@ -42,8 +42,18 @@ const convertToObjectIdMongoDb = (id) => {
   new Types.ObjectId(id);
 };
 
-const randomImageName = () => crypto.randomBytes(16).toString("hex");
+const replacePlaceholder = (template, params) => {
+  Object.keys(params).forEach((key) => {
+    const placeholder = `{{${key}}}`;
+    template = template.replace(new RegExp(placeholder, "g"), params[key]);
+  });
+  return template;
+};
 
+const randomImageName = () => crypto.randomBytes(16).toString("hex");
+const randomProductId = () => {
+  return Math.floor(Math.random() * 899999 + 100000);
+};
 module.exports = {
   getInfoData,
   getSelectData,
@@ -52,4 +62,6 @@ module.exports = {
   updateNestedObject,
   convertToObjectIdMongoDb,
   randomImageName,
+  replacePlaceholder,
+  randomProductId,
 };

@@ -2,3 +2,4 @@
 .env
 e_queue_e-commerce/node_modules
 /src/keys
+/src/logs

@@ -2,9 +2,12 @@ const morgan = require("morgan");
 const compression = require("compression");
 const { default: helmet } = require("helmet");
 const express = require("express");
+const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
-
 const app = express();
+const initRedis = require("./dbs/init.redis");
+const myLogger = require("./loggers/mylogger.log");
+initRedis.initRedis();
 
 app.use(express.json());
 app.use(
@@ -12,6 +15,19 @@ app.use(
     extended: true,
   })
 );
+
+// logger
+app.use((req, res, next) => {
+  const requestId = req.headers["x-request-id"];
+  req.requestId = requestId ? requestId : uuidv4();
+  myLogger.log(`input params::${req.method}`, [
+    req.path,
+    { requestId: req.requestId },
+    req.method === "POST" ? req.body : req.query,
+  ]);
+
+  next();
+});
 
 //init middleware
 app.use(morgan("dev"));
@@ -34,6 +50,15 @@ app.use((req, res, next) => {
 });
 app.use((err, req, res, next) => {
   const statusCode = err.status || 500;
+  const resMessage = `${statusCode} - ${
+    Date.now() - err.now
+  }ms - Response: ${JSON.stringify(err)}`;
+
+  myLogger.error(resMessage, [
+    req.path,
+    { requestId: req.requestId },
+    { message: err.message },
+  ]);
   return res.status(statusCode).json({
     status: "error",
     code: statusCode,
